@@ -20,7 +20,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Map<Long, String> getAllCategories() {
+    public List<String> getAllCategories() {
         log.info("Получить все категории");
         List<Category> listCategory = categoryRepository.findAll();
         if (listCategory.isEmpty()) {
@@ -29,9 +29,8 @@ public class CategoryService {
         } else {
             log.info("getAllCategories");
             return listCategory.stream()
-                    .collect(Collectors.toMap(
-                            Category::getCategoryId,
-                            Category::getName));
+                    .map(Category::getName)
+                    .collect(Collectors.toList());
         }
     }
 }

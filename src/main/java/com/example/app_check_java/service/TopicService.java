@@ -1,0 +1,26 @@
+package com.example.app_check_java.service;
+
+import com.example.app_check_java.model.Category;
+import com.example.app_check_java.model.Topic;
+import com.example.app_check_java.repository.TopicRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class TopicService {
+
+    private final TopicRepository topicRepository;
+
+    @Transactional(readOnly = true)
+    public List<Topic> getAllTopicsByNameCategory(String topicName) {
+        log.info("Получение темы по имени категории");
+        return topicRepository.getAllTopicsByNameCategory(topicName);
+    }
+
+}
