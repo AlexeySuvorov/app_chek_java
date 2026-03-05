@@ -24,4 +24,11 @@ public class GlobalException {
         log.error("<Топик не найден: " + e.getMessage());
         return new ResponseError(HttpStatus.NOT_FOUND, e.getMessage());
     }
+
+    @ExceptionHandler(NotFoundQuestionExceptioin.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseError handleNotFoundQuestionExceptioin(NotFoundQuestionExceptioin f) {
+        log.error("Вопрос не найден: " + f.getMessage());
+        return new ResponseError(HttpStatus.NOT_FOUND, f.getMessage());
+    }
 }

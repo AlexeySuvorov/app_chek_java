@@ -54,8 +54,6 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
                     .docAdddate(rs.getDate("doc_adddate").toLocalDate())
                     .docModdate(rs.getDate("doc_moddate").toLocalDate())
                     .build();
-
-
         }
     }
 }

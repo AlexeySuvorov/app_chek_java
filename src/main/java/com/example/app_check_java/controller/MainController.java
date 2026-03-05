@@ -1,6 +1,7 @@
 package com.example.app_check_java.controller;
 
 
+import com.example.app_check_java.dto.QuestionDTO;
 import com.example.app_check_java.dto.TopicDTO;
 import com.example.app_check_java.exception.NotFoundCategoryException;
 import com.example.app_check_java.model.Category;
@@ -63,5 +64,21 @@ public class MainController {
             return ResponseEntity.badRequest().body(errorMessages.toString());
         }
         return ResponseEntity.ok(topicService.getAllTopicsByNameCategory(topicDTO.getTopicName()));
+    }
+
+    @PostMapping("/Question/All/ByIdTopic")
+    @Operation(summary = "Method for get question", description = "Получить все вопросы по имени темы")
+    public ResponseEntity<?> getAllQuestionByIdTopic(@Valid @RequestBody QuestionDTO questionDTO, BindingResult bindingResult) {
+        log.info("Метод контроллера getAllQuestionByIdTopic. QuestionDTO: {}", questionDTO);
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessages = new StringBuilder();
+            List<FieldError> listFieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : listFieldErrors) {
+                errorMessages.append(fieldError.getDefaultMessage());
+                errorMessages.append(";");
+            }
+            return ResponseEntity.badRequest().body(errorMessages.toString());
+        }
+        return null;
     }
 }
