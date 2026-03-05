@@ -29,7 +29,7 @@ public class CategoryService {
         } else {
             log.info("getAllCategories");
             return listCategory.stream()
-                    .map(Category::getName)
+                    .map(Category::getCategoryName)
                     .collect(Collectors.toList());
         }
     }

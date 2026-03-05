@@ -1,4 +1,4 @@
-package com.example.app_check_java.repository.castom;
+package com.example.app_check_java.repository.custom;
 
 import com.example.app_check_java.model.Category;
 

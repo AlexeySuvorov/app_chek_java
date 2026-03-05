@@ -17,4 +17,11 @@ public class GlobalException {
         log.error("Категория не найдена: " + e.getMessage());
         return new ResponseError(HttpStatus.NOT_FOUND, e.getMessage());
     }
+
+    @ExceptionHandler(NotFoundTopicException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseError handleNotFoundTopicException(NotFoundTopicException e) {
+        log.error("<Топик не найден: " + e.getMessage());
+        return new ResponseError(HttpStatus.NOT_FOUND, e.getMessage());
+    }
 }

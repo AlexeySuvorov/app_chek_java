@@ -1,4 +1,4 @@
-package com.example.app_check_java.repository.castom;
+package com.example.app_check_java.repository.custom;
 
 import com.example.app_check_java.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
 
             return Category.builder()
                     .categoryId(rs.getLong("category_id"))
-                    .name(rs.getString("name"))
+                    .categoryName(rs.getString("category_name"))
                     .build();
 
         }

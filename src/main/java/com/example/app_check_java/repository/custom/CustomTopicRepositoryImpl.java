@@ -1,4 +1,4 @@
-package com.example.app_check_java.repository.castom;
+package com.example.app_check_java.repository.custom;
 
 import com.example.app_check_java.model.Category;
 import com.example.app_check_java.model.Topic;
@@ -19,7 +19,7 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    public CustomTopicRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -27,12 +27,13 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
     public List<Topic> getAllTopicsByNameCategory(String categoryName) {
         log.info("Запуск метода getAllTopicsByNameCategory");
         String sql = """
-            SELECT t.* FROM topic t
+            SELECT t.*, c.category_id, c.category_name FROM topic t
             JOIN category c ON c.category_id = t.category_id
-            WHERE c.name = ?
+            WHERE c.category_name = ?;
             """;
         log.info(sql);
         log.info("params: {}", categoryName);
+        log.debug("SQL запрос: {}", sql);
         return jdbcTemplate.query(sql, new TopicRowMapper(), categoryName);
     }
 
@@ -40,10 +41,16 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
 
         @Override
         public Topic mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Topic topic = new Topic();
+
+            Category category = Category.builder()
+                    .categoryId(Long.valueOf(rs.getLong("category_id")))
+                    .categoryName(rs.getString("category_name"))
+                    .build();
+
             return Topic.builder()
                     .topicId(rs.getLong("topic_id"))
                     .topicName(rs.getString("topic_name"))
+                    .category(category)
                     .docAdddate(rs.getDate("doc_adddate").toLocalDate())
                     .docModdate(rs.getDate("doc_moddate").toLocalDate())
                     .build();
