@@ -84,4 +84,20 @@ public class MainController {
         }
         return ResponseEntity.ok(questionService.findAllQuestionByTopicName(questionDTO.getQuestionName()));
     }
+
+    @PostMapping("/Answer/ByQuestionId")
+    @Operation(summary = "Method for get answer", description = "Получить ответ по номеру вопроса")
+    public ResponseEntity<?> getAnswerByIdQuestion(@Valid @RequestBody QuestionDTO questionDTO, BindingResult bindingResult) {
+        log.info("Метод контроллера getAnswerByIdQuestion. QuestionDTO: {}", questionDTO);
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessages = new StringBuilder();
+            List<FieldError> listFieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : listFieldErrors) {
+                errorMessages.append(fieldError.getDefaultMessage());
+                errorMessages.append(";");
+            }
+            return ResponseEntity.badRequest().body(errorMessages.toString());
+        }
+        return null;
+    }
 }
