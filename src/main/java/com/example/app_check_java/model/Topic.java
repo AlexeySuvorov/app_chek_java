@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "topic")
@@ -27,9 +28,9 @@ public class Topic {
     private Category category;
 
     @Column(name = "doc_adddate")
-    private LocalDate docAdddate;
+    private LocalDateTime docAdddate;
 
     @Column(name = "doc_moddate")
-    private LocalDate docModdate;
+    private LocalDateTime docModdate;
 
 }

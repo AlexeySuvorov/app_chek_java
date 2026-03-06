@@ -51,8 +51,6 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
                     .topicId(rs.getLong("topic_id"))
                     .topicName(rs.getString("topic_name"))
                     .category(category)
-                    .docAdddate(rs.getDate("doc_adddate").toLocalDate())
-                    .docModdate(rs.getDate("doc_moddate").toLocalDate())
                     .build();
         }
     }
