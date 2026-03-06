@@ -6,6 +6,7 @@ import com.example.app_check_java.dto.TopicDTO;
 import com.example.app_check_java.exception.NotFoundCategoryException;
 import com.example.app_check_java.model.Category;
 import com.example.app_check_java.service.CategoryService;
+import com.example.app_check_java.service.QuestionService;
 import com.example.app_check_java.service.TopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,11 +30,13 @@ public class MainController {
 
     private final CategoryService categoryService;
     private final TopicService topicService;
+    private final QuestionService questionService;
 
     @Autowired
-    public MainController(CategoryService categoryService,  TopicService topicService) {
+    public MainController(CategoryService categoryService,  TopicService topicService, QuestionService questionService) {
         this.categoryService = categoryService;
         this.topicService =  topicService;
+        this.questionService = questionService;
     }
 
     @GetMapping ("/test")
@@ -79,6 +82,6 @@ public class MainController {
             }
             return ResponseEntity.badRequest().body(errorMessages.toString());
         }
-        return null;
+        return ResponseEntity.ok(questionService.findAllQuestionByTopicName(questionDTO.getQuestionName()));
     }
 }
