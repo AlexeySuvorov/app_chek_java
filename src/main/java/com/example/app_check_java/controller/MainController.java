@@ -1,10 +1,12 @@
 package com.example.app_check_java.controller;
 
 
+import com.example.app_check_java.dto.AnswerDTO;
 import com.example.app_check_java.dto.QuestionDTO;
 import com.example.app_check_java.dto.TopicDTO;
 import com.example.app_check_java.exception.NotFoundCategoryException;
 import com.example.app_check_java.model.Category;
+import com.example.app_check_java.service.AnswerService;
 import com.example.app_check_java.service.CategoryService;
 import com.example.app_check_java.service.QuestionService;
 import com.example.app_check_java.service.TopicService;
@@ -31,12 +33,15 @@ public class MainController {
     private final CategoryService categoryService;
     private final TopicService topicService;
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @Autowired
-    public MainController(CategoryService categoryService,  TopicService topicService, QuestionService questionService) {
+    public MainController(CategoryService categoryService,  TopicService topicService,
+                          QuestionService questionService, AnswerService answerService) {
         this.categoryService = categoryService;
         this.topicService =  topicService;
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @GetMapping ("/test")
@@ -87,8 +92,8 @@ public class MainController {
 
     @PostMapping("/Answer/ByQuestionId")
     @Operation(summary = "Method for get answer", description = "Получить ответ по номеру вопроса")
-    public ResponseEntity<?> getAnswerByIdQuestion(@Valid @RequestBody QuestionDTO questionDTO, BindingResult bindingResult) {
-        log.info("Метод контроллера getAnswerByIdQuestion. QuestionDTO: {}", questionDTO);
+    public ResponseEntity<?> getAnswerByIdQuestion(@Valid @RequestBody AnswerDTO answerDTO, BindingResult bindingResult) {
+        log.info("Метод контроллера getAnswerByIdQuestion. QuestionDTO: {}", answerDTO);
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessages = new StringBuilder();
             List<FieldError> listFieldErrors = bindingResult.getFieldErrors();
@@ -98,6 +103,7 @@ public class MainController {
             }
             return ResponseEntity.badRequest().body(errorMessages.toString());
         }
-        return null;
+        return ResponseEntity.ok(answerService.getAnswerByQuestionId(answerDTO.getQuestionId()));
+
     }
 }

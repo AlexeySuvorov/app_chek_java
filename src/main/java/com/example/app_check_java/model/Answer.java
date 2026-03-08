@@ -30,7 +30,7 @@ public class Answer {
     @Column(name = "doc_adddate")
     private LocalDateTime docAdddate;
 
-    @Column(name = "doc_moddete")
+    @Column(name = "doc_moddate")
     private LocalDateTime docModDete;
 
 }
