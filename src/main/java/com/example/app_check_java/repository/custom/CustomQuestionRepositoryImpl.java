@@ -40,11 +40,16 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
     }
 
     @Override
-    public Optional<Question> getQuestionByName(String questionName) {
+    public Optional<Question> getQuestionByNameAndTopicId(String questionName, Long  topicId) {
         log.info("getQuestionByName: questionName={}", questionName);
-        String sql = "select * from question where question_name = ?";
+        String sql = """
+                select q.*, t.topic_id, t.topic_name from question q
+                join topic t on q.topic_id = t.topic_id
+                where q.question_name = ?
+                and q.topic_id = ?;
+                """;
         log.debug("SQL запрос: {}", sql);
-        List<Question> questionList =  jdbcTemplate.query(sql, new QestionRowMapper(), questionName);
+        List<Question> questionList =  jdbcTemplate.query(sql, new QestionRowMapper(), questionName, topicId);
         return questionList.stream().findFirst();
     }
 

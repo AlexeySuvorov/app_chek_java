@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface CustomTopicRepository {
     List<Topic> getAllTopicsByNameCategory(String categoryName);
-    Optional<Topic> getTopicByName(String topicName);
+    Optional<Topic> getTopicByNameAndByCategoryId(String topicName, Long categoryId);
 }

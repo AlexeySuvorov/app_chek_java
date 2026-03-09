@@ -10,6 +10,7 @@ import com.example.app_check_java.repository.AnswerRepository;
 import com.example.app_check_java.repository.CategoryRepository;
 import com.example.app_check_java.repository.QuestionRepository;
 import com.example.app_check_java.repository.TopicRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SaveFullDataService {
 
     private final CategoryRepository categoryRepository;
@@ -28,21 +30,12 @@ public class SaveFullDataService {
     private final QuestionRepository questionRepository;
     private final TopicRepository topicRepository;
 
-    @Autowired
-    public SaveFullDataService(CategoryRepository categoryRepository, AnswerRepository answerRepository,
-                               QuestionRepository questionRepository, TopicRepository topicRepository) {
-        this.categoryRepository = categoryRepository;
-        this.answerRepository = answerRepository;
-        this.questionRepository = questionRepository;
-        this.topicRepository = topicRepository;
-    }
-
 
     @Transactional
     public List<String> saveListFullDataDB(List<FullDTO> fullDTO) {
         log.info("Запущен метод SaveFullDataDB. FullDTO: {}", fullDTO);
         List<String> resultOperation = new ArrayList<>();
-        if (fullDTO.isEmpty()) {
+        if (fullDTO == null || fullDTO.isEmpty()) {
             log.info("fullDTO is empty");
             throw new NotFoundDTOException("Возникла ошибка, DTO не может быть пустым.");
         } else {
@@ -63,13 +56,14 @@ public class SaveFullDataService {
             getOrCreateAnswer(fullDTO.getAnswer(), question);
             return "Вопрос " + fullDTO.getQuestion() + " - добавлен";
         } catch (Exception e) {
+            log.error("Ошибка при сохранении вопроса: {}", fullDTO.getQuestion(), e);
             return "Вопрос " + fullDTO.getQuestion() + " - не добавлен";
         }
     }
 
     private Category getOrCreateCategory(String categoryName) {
         log.info("Метод getOrCreateCategory, category: {}", categoryName);
-        return categoryRepository.getCatgoryByName(categoryName).orElseGet(() -> {
+        return categoryRepository.getCategoryByName(categoryName).orElseGet(() -> {
             log.debug("getOrCreateCategory -> категория не найдена, создаю новую запись");
             Category category = Category.builder()
                     .categoryName(categoryName)
@@ -82,7 +76,7 @@ public class SaveFullDataService {
 
     private Topic getOrCreateTopic(String topicName, Category category) {
         log.info("Метод getOrCreateTopic, topic: {}, категория{} ", topicName, category);
-        return topicRepository.getTopicByName(topicName).orElseGet(() -> {
+        return topicRepository.getTopicByNameAndByCategoryId(topicName, category.getCategoryId()).orElseGet(() -> {
             log.debug("getOrCreateCategory -> тема не найдена, создаю новую запись");
             Topic topic = Topic.builder()
                     .topicName(topicName)
@@ -96,7 +90,7 @@ public class SaveFullDataService {
 
     private Question getOrCreateQuestion(String questionName, Topic topic) {
         log.info("Метод getOrCreateQuestion, question: {}, тема{}", questionName, topic);
-        return questionRepository.getQuestionByName(questionName).orElseGet(() -> {
+        return questionRepository.getQuestionByNameAndTopicId(questionName, topic.getTopicId()).orElseGet(() -> {
             log.debug("getOrCreateQuestion -> вопрос не найден, создаю новую запись");
             Question question = Question.builder()
                     .questionName(questionName)

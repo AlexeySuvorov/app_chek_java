@@ -31,7 +31,7 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
     }
 
     @Override
-    public Optional<Category> getCatgoryByName(String name) {
+    public Optional<Category> getCategoryByName(String name) {
         String sql = "select * from category where category_name = ?";
         log.debug("SQL запрос {}", sql);
         List<Category> categoryList  = jdbcTemplate.query(sql, new CategoryRowMapper(), name);

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface CustomCategoryRepository {
     List<Category> getAllCategories();
-    Optional<Category> getCatgoryByName(String name);
+    Optional<Category> getCategoryByName(String name);
 }
