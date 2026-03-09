@@ -2,7 +2,6 @@ package com.example.app_check_java.service;
 
 import com.example.app_check_java.dto.FullDTO;
 import com.example.app_check_java.exception.NotFoundDTOException;
-import com.example.app_check_java.exception.NotFoundQuestionExceptioin;
 import com.example.app_check_java.model.Answer;
 import com.example.app_check_java.model.Category;
 import com.example.app_check_java.model.Question;
@@ -22,7 +21,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class SaveFullData {
+public class SaveFullDataService {
 
     private final CategoryRepository categoryRepository;
     private final AnswerRepository answerRepository;
@@ -30,8 +29,8 @@ public class SaveFullData {
     private final TopicRepository topicRepository;
 
     @Autowired
-    public SaveFullData(CategoryRepository categoryRepository, AnswerRepository answerRepository,
-                        QuestionRepository questionRepository, TopicRepository topicRepository) {
+    public SaveFullDataService(CategoryRepository categoryRepository, AnswerRepository answerRepository,
+                               QuestionRepository questionRepository, TopicRepository topicRepository) {
         this.categoryRepository = categoryRepository;
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
@@ -56,12 +55,16 @@ public class SaveFullData {
 
     @Transactional
     public String saveFullDTO(FullDTO fullDTO) {
-        log.info("сохранение данных fullDTO: {}", fullDTO);
-        Category category = getOrCreateCategory(fullDTO.getCategory());
-        Topic topic = getOrCreateTopic(fullDTO.getTopic(), category);
-        Question question = getOrCreateQuestion(fullDTO.getQuestion(), topic);
-        getOrCreateAnswer(fullDTO.getAnswer(), question);
-        return "Вопрос " + fullDTO.getQuestion() + "добавлен";
+        try {
+            log.info("сохранение данных fullDTO: {}", fullDTO);
+            Category category = getOrCreateCategory(fullDTO.getCategory());
+            Topic topic = getOrCreateTopic(fullDTO.getTopic(), category);
+            Question question = getOrCreateQuestion(fullDTO.getQuestion(), topic);
+            getOrCreateAnswer(fullDTO.getAnswer(), question);
+            return "Вопрос " + fullDTO.getQuestion() + " - добавлен";
+        } catch (Exception e) {
+            return "Вопрос " + fullDTO.getQuestion() + " - не добавлен";
+        }
     }
 
     private Category getOrCreateCategory(String categoryName) {

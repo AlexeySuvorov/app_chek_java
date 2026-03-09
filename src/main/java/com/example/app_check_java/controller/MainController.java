@@ -7,10 +7,8 @@ import com.example.app_check_java.dto.QuestionDTO;
 import com.example.app_check_java.dto.TopicDTO;
 import com.example.app_check_java.exception.NotFoundCategoryException;
 import com.example.app_check_java.model.Category;
-import com.example.app_check_java.service.AnswerService;
-import com.example.app_check_java.service.CategoryService;
-import com.example.app_check_java.service.QuestionService;
-import com.example.app_check_java.service.TopicService;
+import com.example.app_check_java.repository.TopicRepository;
+import com.example.app_check_java.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,14 +33,17 @@ public class MainController {
     private final TopicService topicService;
     private final QuestionService questionService;
     private final AnswerService answerService;
+    private final SaveFullDataService saveFullDataService;
 
     @Autowired
     public MainController(CategoryService categoryService,  TopicService topicService,
-                          QuestionService questionService, AnswerService answerService) {
+                          QuestionService questionService, AnswerService answerService,
+                          SaveFullDataService saveFullDataService) {
         this.categoryService = categoryService;
         this.topicService =  topicService;
         this.questionService = questionService;
         this.answerService = answerService;
+        this.saveFullDataService = saveFullDataService;
     }
 
     @GetMapping ("/test")
@@ -108,10 +109,10 @@ public class MainController {
 
     }
 
-    @PutMapping("/addData")
+    @PostMapping("/addData")
     @Operation(summary = "Method for add data", description = "метод для добавления данных во все таблицы category, topic, question, answer")
-    public ResponseEntity<?> addData(@Valid List<FullDTO> fullDTO, BindingResult bindingResult) {
-        log.info("Метод контроллера addData. FullDTO: {}", fullDTO);
+    public ResponseEntity<?> addData(@Valid @RequestBody List<@Valid FullDTO> fullDTOList, BindingResult bindingResult) {
+        log.info("Метод контроллера addData. FullDTO: {}", fullDTOList);
         if (bindingResult.hasErrors()) {
             log.info("addData - Ошибка при валидации сообщения");
             StringBuilder errorMessage = new StringBuilder();
@@ -122,6 +123,7 @@ public class MainController {
             }
             return ResponseEntity.badRequest().body(errorMessage.toString());
         }
-        return null;
+        List<String> resultList =  saveFullDataService.saveListFullDataDB(fullDTOList);
+        return  ResponseEntity.ok(resultList);
     }
 }

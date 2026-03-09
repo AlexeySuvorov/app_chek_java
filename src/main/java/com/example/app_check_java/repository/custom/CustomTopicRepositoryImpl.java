@@ -41,7 +41,11 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
     @Override
     public Optional<Topic> getTopicByName(String topicName) {
         log.info("Метод getTopicByName, topicName: {}", topicName);
-        String sql = "select * from topic where topic_name = ?;";
+        String sql = """
+            SELECT t.*, c.category_id, c.category_name FROM topic t
+            JOIN category c ON c.category_id = t.category_id
+            WHERE t.topic_name = ?;
+            """;
         log.info("SQL запрос {}", sql);
         List<Topic> topicList = jdbcTemplate.query(sql, new TopicRowMapper(), topicName);
         return topicList.stream().findFirst();
