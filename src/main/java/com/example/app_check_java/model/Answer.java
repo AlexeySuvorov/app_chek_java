@@ -31,6 +31,6 @@ public class Answer {
     private LocalDateTime docAdddate;
 
     @Column(name = "doc_moddate")
-    private LocalDateTime docModDete;
+    private LocalDateTime docModdate;
 
 }

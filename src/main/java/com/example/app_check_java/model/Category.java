@@ -30,9 +30,11 @@ public class Category {
     @Column(name = "mod_date")
     private LocalDateTime modDate;
 
+
 //    @OneToMany(mappedBy = "category", // Связь двунаправленная, владелец - Topic
 //            cascade = CascadeType.ALL, // Все операции передаются дочерним темам
 //            orphanRemoval = true) // Удалять темы, отвязанные от категории
 //    @Builder.Default // Защита от null при использовании билдера
 //    private List<Topic> topics = new ArrayList<>();
+
 }
