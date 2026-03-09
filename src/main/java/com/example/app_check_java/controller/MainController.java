@@ -2,6 +2,7 @@ package com.example.app_check_java.controller;
 
 
 import com.example.app_check_java.dto.AnswerDTO;
+import com.example.app_check_java.dto.FullDTO;
 import com.example.app_check_java.dto.QuestionDTO;
 import com.example.app_check_java.dto.TopicDTO;
 import com.example.app_check_java.exception.NotFoundCategoryException;
@@ -105,5 +106,22 @@ public class MainController {
         }
         return ResponseEntity.ok(answerService.getAnswerByQuestionId(answerDTO.getQuestionId()));
 
+    }
+
+    @PutMapping("/addData")
+    @Operation(summary = "Method for add data", description = "метод для добавления данных во все таблицы category, topic, question, answer")
+    public ResponseEntity<?> addData(@Valid List<FullDTO> fullDTO, BindingResult bindingResult) {
+        log.info("Метод контроллера addData. FullDTO: {}", fullDTO);
+        if (bindingResult.hasErrors()) {
+            log.info("addData - Ошибка при валидации сообщения");
+            StringBuilder errorMessage = new StringBuilder();
+            List<FieldError> listFieldErrors = bindingResult.getFieldErrors();
+            for (FieldError fieldError : listFieldErrors) {
+                errorMessage.append(fieldError.getDefaultMessage());
+                errorMessage.append(";");
+            }
+            return ResponseEntity.badRequest().body(errorMessage.toString());
+        }
+        return null;
     }
 }

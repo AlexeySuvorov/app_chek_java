@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -35,6 +36,15 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
         log.info("params: {}", categoryName);
         log.debug("SQL запрос: {}", sql);
         return jdbcTemplate.query(sql, new TopicRowMapper(), categoryName);
+    }
+
+    @Override
+    public Optional<Topic> getTopicByName(String topicName) {
+        log.info("Метод getTopicByName, topicName: {}", topicName);
+        String sql = "select * from topic where topic_name = ?;";
+        log.info("SQL запрос {}", sql);
+        List<Topic> topicList = jdbcTemplate.query(sql, new TopicRowMapper(), topicName);
+        return topicList.stream().findFirst();
     }
 
     private static class TopicRowMapper implements RowMapper<Topic> {

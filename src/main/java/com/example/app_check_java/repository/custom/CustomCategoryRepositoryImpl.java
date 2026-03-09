@@ -1,16 +1,21 @@
 package com.example.app_check_java.repository.custom;
 
 import com.example.app_check_java.model.Category;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
+@Slf4j
+@Transactional(readOnly = true)
 public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
     private final JdbcTemplate jdbcTemplate;
 
@@ -23,6 +28,14 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository {
     public List<Category> getAllCategories() {
         String sql = "select * from category";
         return jdbcTemplate.query(sql, new CategoryRowMapper());
+    }
+
+    @Override
+    public Optional<Category> getCatgoryByName(String name) {
+        String sql = "select * from category where category_name = ?";
+        log.debug("SQL запрос {}", sql);
+        List<Category> categoryList  = jdbcTemplate.query(sql, new CategoryRowMapper(), name);
+        return categoryList.stream().findFirst();
     }
 
     private static class CategoryRowMapper implements RowMapper<Category> {

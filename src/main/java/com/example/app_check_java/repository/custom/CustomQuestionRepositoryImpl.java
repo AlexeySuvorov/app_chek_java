@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -36,6 +37,15 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
         log.debug("SQL запрос: {}", sql);
         log.info("params: {}", topicName);
         return jdbcTemplate.query(sql, new QestionRowMapper(), topicName);
+    }
+
+    @Override
+    public Optional<Question> getQuestionByName(String questionName) {
+        log.info("getQuestionByName: questionName={}", questionName);
+        String sql = "select * from question where question_name = ?";
+        log.debug("SQL запрос: {}", sql);
+        List<Question> questionList =  jdbcTemplate.query(sql, new QestionRowMapper(), questionName);
+        return questionList.stream().findFirst();
     }
 
 

@@ -1,6 +1,6 @@
 package com.example.app_check_java.service;
 
-import com.example.app_check_java.exception.NotFoundAnwerException;
+import com.example.app_check_java.exception.NotFoundAnswerException;
 import com.example.app_check_java.model.Answer;
 import com.example.app_check_java.repository.AnswerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class AnswerService {
             return answer.get();
         } else {
             log.info("Ответ на вопрос с ID {} не найден", questionId);
-            throw new NotFoundAnwerException("Ответ на вопрос с ID - " + questionId + " не найден");
+            throw new NotFoundAnswerException("Ответ на вопрос с ID - " + questionId + " не найден");
         }
     }
 }
