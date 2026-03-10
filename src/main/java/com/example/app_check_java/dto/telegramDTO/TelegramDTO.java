@@ -17,12 +17,10 @@ import java.util.Map;
 @Builder
 public class TelegramDTO {
 
-    @NotBlank(message = "user не может быть пустой")
-    private String userName;
+    private UserTelegramDTO user;
 
     @NotBlank
     private String message;
-
 
     private Long level; //уровень таблицы 1-category, 2-topic, 3-question, 4-answer.
 

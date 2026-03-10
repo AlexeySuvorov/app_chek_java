@@ -18,7 +18,7 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
     //Статичная клавиатура у бота
     @Override
     public ReplyKeyboard createStartKeyboard(TelegramDTO telegramDTO) {
-        log.info("start method service.bord.InlineKeyboardService.createStartKeyboard with chatId {}", telegramDTO.getUserName());
+        log.info("start method service.bord.InlineKeyboardService.createStartKeyboard with chatId {}", telegramDTO.getUser().getUserName());
 
         List<InlineKeyboardRow> keyboardRows = new ArrayList<>();//Создается список строк клавиатуры (keyboardRows).
         InlineKeyboardRow currentRow = new InlineKeyboardRow();//Создается текущая строка (currentRow), в которую добавляются кнопки.
