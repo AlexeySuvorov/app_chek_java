@@ -1,6 +1,6 @@
-package com.example.app_check_java.service;
+package com.example.app_check_java.service.dbService;
 
-import com.example.app_check_java.dto.FullDTO;
+import com.example.app_check_java.dto.dbDTO.FullDTO;
 import com.example.app_check_java.exception.NotFoundDTOException;
 import com.example.app_check_java.model.Answer;
 import com.example.app_check_java.model.Category;
@@ -12,7 +12,6 @@ import com.example.app_check_java.repository.QuestionRepository;
 import com.example.app_check_java.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

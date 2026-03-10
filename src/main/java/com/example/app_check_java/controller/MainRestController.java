@@ -1,33 +1,28 @@
 package com.example.app_check_java.controller;
 
 
-import com.example.app_check_java.dto.AnswerDTO;
-import com.example.app_check_java.dto.FullDTO;
-import com.example.app_check_java.dto.QuestionDTO;
-import com.example.app_check_java.dto.TopicDTO;
-import com.example.app_check_java.exception.NotFoundCategoryException;
-import com.example.app_check_java.model.Category;
-import com.example.app_check_java.repository.TopicRepository;
-import com.example.app_check_java.service.*;
+import com.example.app_check_java.dto.dbDTO.AnswerDTO;
+import com.example.app_check_java.dto.dbDTO.FullDTO;
+import com.example.app_check_java.dto.dbDTO.QuestionDTO;
+import com.example.app_check_java.dto.dbDTO.TopicDTO;
+import com.example.app_check_java.service.dbService.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 @Slf4j
 @Tag(name = "Controller for skill java", description = "главный контроллер для работы приложения через API")
-public class MainController {
+public class MainRestController {
 
     private final CategoryService categoryService;
     private final TopicService topicService;
@@ -36,9 +31,9 @@ public class MainController {
     private final SaveFullDataService saveFullDataService;
 
     @Autowired
-    public MainController(CategoryService categoryService,  TopicService topicService,
-                          QuestionService questionService, AnswerService answerService,
-                          SaveFullDataService saveFullDataService) {
+    public MainRestController(CategoryService categoryService, TopicService topicService,
+                              QuestionService questionService, AnswerService answerService,
+                              SaveFullDataService saveFullDataService) {
         this.categoryService = categoryService;
         this.topicService =  topicService;
         this.questionService = questionService;

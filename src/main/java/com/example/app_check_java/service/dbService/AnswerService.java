@@ -1,4 +1,4 @@
-package com.example.app_check_java.service;
+package com.example.app_check_java.service.dbService;
 
 import com.example.app_check_java.exception.NotFoundAnswerException;
 import com.example.app_check_java.model.Answer;

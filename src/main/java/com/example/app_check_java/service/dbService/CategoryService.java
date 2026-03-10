@@ -1,4 +1,4 @@
-package com.example.app_check_java.service;
+package com.example.app_check_java.service.dbService;
 
 import com.example.app_check_java.exception.NotFoundCategoryException;
 import com.example.app_check_java.model.Category;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,6 +1,5 @@
-package com.example.app_check_java.dto;
+package com.example.app_check_java.dto.dbDTO;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

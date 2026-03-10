@@ -1,7 +1,6 @@
-package com.example.app_check_java.service;
+package com.example.app_check_java.service.dbService;
 
 import com.example.app_check_java.exception.NotFoundTopicException;
-import com.example.app_check_java.model.Category;
 import com.example.app_check_java.model.Topic;
 import com.example.app_check_java.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;

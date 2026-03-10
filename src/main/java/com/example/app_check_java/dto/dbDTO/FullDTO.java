@@ -1,4 +1,4 @@
-package com.example.app_check_java.dto;
+package com.example.app_check_java.dto.dbDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
