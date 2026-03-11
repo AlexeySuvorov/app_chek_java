@@ -24,8 +24,12 @@ public class TelegramDTO {
 
     private Long level; //уровень таблицы 1-category, 2-topic, 3-question, 4-answer.
 
-    private Long number; //номер записи для уровня указанного выше.
+    private String category;
+    private Long topic;
+    private Long question;
 
     private List<String> list = new ArrayList<>();
+
+    private Map<String, String> map = new HashMap<>();
 
 }

@@ -27,7 +27,7 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
         for(String element : list) {
             log.info("callbackData {}", element);
             InlineKeyboardButton button = InlineKeyboardButton.builder()
-                    .text(element)
+                    .text(telegramDTO.getLevel() + "_" + element)
                     .callbackData(element)
                     .build();
             currentRow.add(button);

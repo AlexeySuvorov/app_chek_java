@@ -19,7 +19,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<String> getAllCategories() {
+    public List<Category> getAllCategories() {
         log.info("Получить все категории");
         List<Category> listCategory = categoryRepository.findAll();
         if (listCategory.isEmpty()) {
@@ -27,11 +27,10 @@ public class CategoryService {
             throw new NotFoundCategoryException("Category not found");
         } else {
             log.info("getAllCategories");
-            return listCategory.stream()
-                    .map(Category::getCategoryName)
-                    .collect(Collectors.toList());
+            return listCategory;
+//            return listCategory.stream()
+//                    .map(Category::getCategoryName)
+//                    .collect(Collectors.toList());
         }
     }
-
-
 }
