@@ -47,7 +47,7 @@ public class GetTelegramMessageService {
             TelegramDTO telegramDTO = TelegramDTO.builder()
                     .user(userTelegramDTO)
                     .map(newMap)
-                    .level(1L)
+                    .level(1)
                     .build();
             sendTelegramMessageService.startKeybord(telegramDTO, 0);
 
@@ -59,15 +59,18 @@ public class GetTelegramMessageService {
                     .lastName(update.getCallbackQuery().getFrom().getLastName())
                     .build();
             log.info("test update.getCallbackQuery().getData() - {}", update.getCallbackQuery().getData());
+            String[] array = update.getCallbackQuery().getData().split("_");
             TelegramDTO telegramDTO = TelegramDTO.builder()
                     .user(userTelegramDTO)
                     .message(update.getCallbackQuery().getData())
+                    .level(Integer.parseInt(array[0]))
+                    .category(Integer.parseInt(array[1]))
+                    .topic(Integer.parseInt(array[2]))
+                    .question(Integer.parseInt(array[3]))
                     .build();
-            List<Topic> topicList = topicService.getAllTopicsByNameCategory(telegramDTO.getMessage());
-            List<String> lists = new ArrayList<>();
-            topicList.forEach(topic -> {lists.add(topic.getTopicName());});
-            telegramDTO.setList(lists);
-            telegramDTO.setLevel(2L);
+            if (telegramDTO.getLevel() == 2) {
+                forTopic(telegramDTO);
+            }
             sendTelegramMessageService.startKeybord(telegramDTO, 0);
         }
 
@@ -80,17 +83,18 @@ public class GetTelegramMessageService {
                         category -> category.getCategoryName()
                 ));
         telegramDTO.setMap(newMap);
-        telegramDTO.setLevel(1L);
+        telegramDTO.setLevel(1);
         return telegramDTO;
     }
 
     private TelegramDTO forTopic(TelegramDTO telegramDTO) {
-        List<Topic> topicList = topicService.getAllTopicsByNameCategory(telegramDTO.getMessage());
-        List<String> lists = new ArrayList<>();
-        topicList.forEach(topic -> {lists.add(topic.getTopicName());});
-        telegramDTO.setCategory(telegramDTO.getMessage());
-        telegramDTO.setList(lists);
-        telegramDTO.setLevel(2L);
+        Map<String, String> newMap = topicService.getAllTopicsByIdCategory(telegramDTO.getCategory()).stream()
+                .collect(Collectors.toMap(
+                        topic -> String.valueOf(topic.getTopicId()),
+                        topic -> topic.getTopicName()
+                ));
+        telegramDTO.setMap(newMap);
+        telegramDTO.setLevel(2);
         return telegramDTO;
     }
 

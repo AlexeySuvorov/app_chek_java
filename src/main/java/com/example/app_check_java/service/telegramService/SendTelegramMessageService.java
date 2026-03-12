@@ -39,12 +39,12 @@ public class SendTelegramMessageService {
         }
         log.info("Запущен метод startKeybord для сообщения - {}", telegramDTO);
         if (telegramDTO != null) {
-            log.info("Сообщение rabbitMessageDTO не пустое");
+            log.info("Сообщение telegramDTO не пустое");
             Long chatId = telegramDTO.getUser().getChatId();
             ReplyKeyboard markup = null;
             List<String> markupList = new ArrayList<>();
             if (!checkMainMenu(telegramDTO)) { //проверяем, добавлять ли кнопку перехода на главное меню
-                telegramDTO.getList().add("Категории");
+                telegramDTO.getMap().put("0", "Категории");
             }
             markup = keyBoardService.createStartKeyboard(telegramDTO);
             methodSendMessage(chatId, "================================", markup);

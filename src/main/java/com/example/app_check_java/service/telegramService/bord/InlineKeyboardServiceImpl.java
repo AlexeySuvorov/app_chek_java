@@ -23,13 +23,33 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
         List<InlineKeyboardRow> keyboardRows = new ArrayList<>();//Создается список строк клавиатуры (keyboardRows).
         InlineKeyboardRow currentRow = new InlineKeyboardRow();//Создается текущая строка (currentRow), в которую добавляются кнопки.
 
-        List<String> list = telegramDTO.getList();
-        for(String element : list) {
-            log.info("callbackData {}", element);
+        Map<String, String> map = telegramDTO.getMap();
+        for(String elementKey : map.keySet()) {
+            log.info("callbackData {}", elementKey);
+            log.info("level {}", telegramDTO.getLevel());
+            String category = "0";
+            String topic = "0";
+            String question = "0";
+            if (telegramDTO.getLevel() == 1) {
+                category = elementKey;
+            } else if (telegramDTO.getLevel() == 2) {
+                category = telegramDTO.getCategory() + "";
+                topic = elementKey;
+            } else if (telegramDTO.getLevel() == 3) {
+                category = telegramDTO.getCategory() + "";
+                topic = telegramDTO.getTopic() + "";
+                question = elementKey;
+            }
             InlineKeyboardButton button = InlineKeyboardButton.builder()
-                    .text(telegramDTO.getLevel() + "_" + element)
-                    .callbackData(element)
+                    .text(map.get(elementKey))
+                    .callbackData((telegramDTO.getLevel() + 1) + "_"
+                            + category
+                            + "_"
+                            + topic
+                            + "_"
+                            + question)
                     .build();
+            log.info("mapKey: {}, mapValue: {}", elementKey,  map.get(elementKey));
             currentRow.add(button);
 
             //Если операция относится к вопросу, начинаем каждую строку с новой строки

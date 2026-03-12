@@ -22,11 +22,24 @@ public class TopicService {
         log.info("Получение темы по имени категории");
         List<Topic> topicList = topicRepository.getAllTopicsByNameCategory(topicName);
         if (topicList.isEmpty()) {
-            log.error("В БД нет категорий");
+            log.error("В БД нет тем");
             throw new NotFoundTopicException("Topic not found");
         } else {
-            log.info("Получены категории из БД");
+            log.info("Получены тем из БД");
             return topicList;
         }
+    }
+
+    public List<Topic> getAllTopicsByIdCategory(Integer categoryId) {
+        log.info("Получение темы по Id тем");
+        List<Topic> topicList = topicRepository.getAllTopicsByIdCategory(categoryId);
+        if (topicList.isEmpty()) {
+            log.error("В БД нет тем для ID категории - {}", categoryId);
+            throw new NotFoundTopicException("Topic not found");
+        } else {
+            log.info("Получены темы из БД");
+            return topicList;
+        }
+
     }
 }

@@ -32,7 +32,6 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
             JOIN category c ON c.category_id = t.category_id
             WHERE c.category_name = ?;
             """;
-        log.info(sql);
         log.info("params: {}", categoryName);
         log.debug("SQL запрос: {}", sql);
         return jdbcTemplate.query(sql, new TopicRowMapper(), categoryName);
@@ -51,6 +50,17 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
         List<Topic> topicList = jdbcTemplate.query(sql, new TopicRowMapper(), topicName, categoryId);
         return topicList.stream().findFirst();
     }
+
+    @Override
+    public List<Topic> getAllTopicsByIdCategory(Integer categoryId) {
+        log.info("Метод репозитория getAllTopicsByIdCategory, categoryId: {}", categoryId);
+        String sql = """
+                select * from topic t
+                JOIN category c ON c.category_id = t.category_id
+                where c.category_id = ?;
+                """;
+        log.debug("SQL запрос: {}", sql);
+        return jdbcTemplate.query(sql, new TopicRowMapper(), categoryId);}
 
     private static class TopicRowMapper implements RowMapper<Topic> {
 

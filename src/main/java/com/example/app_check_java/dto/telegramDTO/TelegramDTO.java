@@ -22,11 +22,11 @@ public class TelegramDTO {
     @NotBlank
     private String message;
 
-    private Long level; //уровень таблицы 1-category, 2-topic, 3-question, 4-answer.
+    private int level; //уровень таблицы 1-category, 2-topic, 3-question, 4-answer.
 
-    private String category;
-    private Long topic;
-    private Long question;
+    private int category;
+    private int topic;
+    private int question;
 
     private List<String> list = new ArrayList<>();
 

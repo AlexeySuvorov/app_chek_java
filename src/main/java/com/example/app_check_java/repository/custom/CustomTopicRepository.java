@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface CustomTopicRepository {
     List<Topic> getAllTopicsByNameCategory(String categoryName);
     Optional<Topic> getTopicByNameAndByCategoryId(String topicName, Long categoryId);
+    List<Topic> getAllTopicsByIdCategory(Integer categoryId);
+
 }
