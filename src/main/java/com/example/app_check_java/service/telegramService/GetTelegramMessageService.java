@@ -2,7 +2,9 @@ package com.example.app_check_java.service.telegramService;
 
 import com.example.app_check_java.dto.telegramDTO.TelegramDTO;
 import com.example.app_check_java.dto.telegramDTO.UserTelegramDTO;
+import com.example.app_check_java.model.Answer;
 import com.example.app_check_java.model.Topic;
+import com.example.app_check_java.service.dbService.AnswerService;
 import com.example.app_check_java.service.dbService.CategoryService;
 import com.example.app_check_java.service.dbService.QuestionService;
 import com.example.app_check_java.service.dbService.TopicService;
@@ -26,8 +28,8 @@ public class GetTelegramMessageService {
     private final CategoryService categoryService;
     private final TopicService topicService;
     private final QuestionService questionService;
-    private final InlineKeyboardServiceImpl inlineKeyboardServiceImpl;
     private final SendTelegramMessageService sendTelegramMessageService;
+    private final AnswerService answerService;
 
     public void handlerTelegramMessage(Update update, String type) {
         log.info("Запущен метод - handlerTelegramMessage");
@@ -73,6 +75,7 @@ public class GetTelegramMessageService {
             switch(telegramDTO.getLevel()) {
                 case 2 -> forTopic(telegramDTO);
                 case 3 -> forQuestion(telegramDTO);
+                case 4 -> forAnswer(telegramDTO);
             }
             sendTelegramMessageService.startKeybord(telegramDTO, 0);
         }
@@ -111,6 +114,19 @@ public class GetTelegramMessageService {
                 ));
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(3);
+        return telegramDTO;
+    }
+
+    private TelegramDTO forAnswer(TelegramDTO telegramDTO) {
+        log.info("Метод  forAnswer, telegramDTO {}", telegramDTO);
+        Map<String, String> newMap = new HashMap<>();
+        Answer answer = answerService.getAnswerByQuestionId(telegramDTO.getQuestion());
+        newMap.put(String.valueOf(answer.getAnswerId()), answer.getAnswerName());
+        newMap.put("0", "Категории");
+        newMap.put("1", "Темы");
+        newMap.put("2", "Вопросы");
+        telegramDTO.setMap(newMap);
+        telegramDTO.setLevel(0);
         return telegramDTO;
     }
 }
