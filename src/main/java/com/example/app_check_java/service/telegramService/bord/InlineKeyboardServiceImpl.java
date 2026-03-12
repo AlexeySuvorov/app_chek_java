@@ -30,15 +30,18 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
             String category = "0";
             String topic = "0";
             String question = "0";
-            if (telegramDTO.getLevel() == 1) {
-                category = elementKey;
-            } else if (telegramDTO.getLevel() == 2) {
-                category = telegramDTO.getCategory() + "";
-                topic = elementKey;
-            } else if (telegramDTO.getLevel() == 3) {
-                category = telegramDTO.getCategory() + "";
-                topic = telegramDTO.getTopic() + "";
-                question = elementKey;
+
+            switch(telegramDTO.getLevel()) {
+                case 1 -> category = elementKey;
+                case 2 -> {
+                    category = telegramDTO.getCategory() + "";
+                    topic = elementKey;
+                }
+                case 3 -> {
+                    category = telegramDTO.getCategory() + "";
+                    topic = telegramDTO.getTopic() + "";
+                    question = elementKey;
+                }
             }
             InlineKeyboardButton button = InlineKeyboardButton.builder()
                     .text(map.get(elementKey))

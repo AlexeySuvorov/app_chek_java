@@ -17,6 +17,17 @@ import java.util.Optional;
 @Repository
 @Slf4j
 public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
+    @Override
+    public List<Question> getQuestionsByTopicId(Integer topicId) {
+        log.info("Метод репозитория getQuestionsByTopicId {}", topicId);
+        String sql = """
+                select * from question q
+                join topic t on t.topic_id = q.topic_id
+                where t.topic_id = ?;
+                """;
+        log.debug("SQL: {}", sql);
+        return jdbcTemplate.query(sql, new QestionRowMapper(), topicId);
+    }
 
     private final JdbcTemplate jdbcTemplate;
 

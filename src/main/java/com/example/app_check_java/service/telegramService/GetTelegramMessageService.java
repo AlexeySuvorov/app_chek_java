@@ -4,6 +4,7 @@ import com.example.app_check_java.dto.telegramDTO.TelegramDTO;
 import com.example.app_check_java.dto.telegramDTO.UserTelegramDTO;
 import com.example.app_check_java.model.Topic;
 import com.example.app_check_java.service.dbService.CategoryService;
+import com.example.app_check_java.service.dbService.QuestionService;
 import com.example.app_check_java.service.dbService.TopicService;
 import com.example.app_check_java.service.telegramService.bord.InlineKeyboardServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class GetTelegramMessageService {
 
     private final CategoryService categoryService;
     private final TopicService topicService;
+    private final QuestionService questionService;
     private final InlineKeyboardServiceImpl inlineKeyboardServiceImpl;
     private final SendTelegramMessageService sendTelegramMessageService;
 
@@ -68,8 +70,9 @@ public class GetTelegramMessageService {
                     .topic(Integer.parseInt(array[2]))
                     .question(Integer.parseInt(array[3]))
                     .build();
-            if (telegramDTO.getLevel() == 2) {
-                forTopic(telegramDTO);
+            switch(telegramDTO.getLevel()) {
+                case 2 -> forTopic(telegramDTO);
+                case 3 -> forQuestion(telegramDTO);
             }
             sendTelegramMessageService.startKeybord(telegramDTO, 0);
         }
@@ -88,6 +91,7 @@ public class GetTelegramMessageService {
     }
 
     private TelegramDTO forTopic(TelegramDTO telegramDTO) {
+        log.info("Метод forTopic, telegramDTO {}", telegramDTO);
         Map<String, String> newMap = topicService.getAllTopicsByIdCategory(telegramDTO.getCategory()).stream()
                 .collect(Collectors.toMap(
                         topic -> String.valueOf(topic.getTopicId()),
@@ -98,5 +102,15 @@ public class GetTelegramMessageService {
         return telegramDTO;
     }
 
-
+    private TelegramDTO forQuestion(TelegramDTO telegramDTO) {
+        log.info("Метод forQuestion, telegramDTO {}", telegramDTO);
+        Map<String, String> newMap = questionService.findAllQuestionByTopicId(telegramDTO.getTopic()).stream()
+                .collect(Collectors.toMap(
+                        question -> String.valueOf(question.getQuestionId()),
+                        question -> question.getQuestionName()
+                ));
+        telegramDTO.setMap(newMap);
+        telegramDTO.setLevel(3);
+        return telegramDTO;
+    }
 }

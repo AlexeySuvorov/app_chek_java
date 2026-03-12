@@ -27,9 +27,20 @@ public class QuestionService {
         List<Question> questions = questionRepository.getQuestions(topicName);
         if (questions.isEmpty()) {
             log.info("questions is empty");
-            throw new NotFoundQuestionExceptioin("По теме " + topicName + "вопросы не найдены");
+            throw new NotFoundQuestionExceptioin("По теме " + topicName + " вопросы не найдены");
         }
         log.info("Получены вопросы из базы данных: " + questions.toString());
+        return questions;
+    }
+
+    public List<Question> findAllQuestionByTopicId(Integer topicId) {
+        log.info("findAllQuestionByTopicId - topicId:{}", topicId);
+        List<Question> questions = questionRepository.getQuestionsByTopicId(topicId);
+        if (questions.isEmpty()) {
+            log.info("questions is empty");
+            throw new NotFoundQuestionExceptioin("По id темы " + topicId + " вопросы не найдены");
+        }
+        log.info("Получены вопрсоы из базы данных: " + questions.toString());
         return questions;
     }
 
