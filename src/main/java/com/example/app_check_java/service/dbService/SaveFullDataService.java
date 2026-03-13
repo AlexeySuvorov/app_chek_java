@@ -103,12 +103,15 @@ public class SaveFullDataService {
 
     private Answer getOrCreateAnswer(String answerName, Question question) {
         log.info("Метод getOrCreateAnswer, answer: {}, question: {}", answerName, question);
-        Answer answer = Answer.builder()
-                .answerName(answerName)
-                .question(question)
-                .docAdddate(LocalDateTime.now())
-                .docModdate(LocalDateTime.now())
-                .build();
-        return answerRepository.save(answer);
+        return answerRepository.getAnswersByIdQuestion(question.getQuestionId()).orElseGet(() -> {
+            log.debug("getOrCreateAnswer -> ответ на вопрос в БД уже существует");
+            Answer answer = Answer.builder()
+                    .answerName(answerName)
+                    .question(question)
+                    .docAdddate(LocalDateTime.now())
+                    .docModdate(LocalDateTime.now())
+                    .build();
+            return answerRepository.save(answer);
+        });
     }
 }
