@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Table(name = "answer")
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,4 +32,13 @@ public class Answer {
     @Column(name = "doc_moddate")
     private LocalDateTime docModdate;
 
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "answerId=" + answerId +
+                ", answerName='" + answerName + '\'' +
+                ", docAdddate=" + docAdddate +
+                ", docModdate=" + docModdate +
+                '}';
+    }
 }

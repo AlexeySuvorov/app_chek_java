@@ -43,17 +43,11 @@ public class SendTelegramMessageService {
             Long chatId = telegramDTO.getUser().getChatId();
             ReplyKeyboard markup = null;
             List<String> markupList = new ArrayList<>();
-            if (!checkMainMenu(telegramDTO)) { //проверяем, добавлять ли кнопку перехода на главное меню
-                telegramDTO.getMap().put("0", "Категории");
-            }
             markup = keyBoardService.createStartKeyboard(telegramDTO);
             methodSendMessage(chatId, telegramDTO.getMessage(), markup);
         }
     }
 
-    private boolean checkMainMenu(TelegramDTO telegramDTO) {
-        return telegramDTO.getLevel() == 1;
-    }
 
 
     //Отправка сообщений в Телеграм

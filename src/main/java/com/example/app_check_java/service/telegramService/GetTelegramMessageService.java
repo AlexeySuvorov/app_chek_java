@@ -65,10 +65,29 @@ public class GetTelegramMessageService {
                     .topic(Integer.parseInt(array[2]))
                     .question(Integer.parseInt(array[3]))
                     .build();
-            switch(telegramDTO.getLevel()) {
-                case 2 -> forTopic(telegramDTO);
-                case 3 -> forQuestion(telegramDTO);
-                case 4 -> forAnswer(telegramDTO);
+            switch (telegramDTO.getLevel()) {
+                case 2 -> {
+                    if (telegramDTO.getCategory() == 0) { //условие для кнопки возврата на предыюущий уровень
+                        forCategory(telegramDTO);
+                    } else {
+                        forTopic(telegramDTO);
+                    }
+                }
+                case 3 -> {
+                    if (telegramDTO.getTopic() == 0) {
+                        forCategory(telegramDTO);
+                    } else {
+                        forQuestion(telegramDTO);
+                    }
+                }
+                case 4 -> {
+                    if (telegramDTO.getQuestion() == 0) {
+                        forTopic(telegramDTO);
+                    } else {
+                        forAnswer(telegramDTO);
+                    }
+                }
+                case 5 -> forQuestion(telegramDTO);
             }
             sendTelegramMessageService.startKeybord(telegramDTO, 0);
         }
@@ -94,6 +113,7 @@ public class GetTelegramMessageService {
                         topic -> String.valueOf(topic.getTopicId()),
                         topic -> topic.getTopicName()
                 ));
+        newMap.put("0", "Категории");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(2);
         telegramDTO.setMessage("Темы");
@@ -107,6 +127,7 @@ public class GetTelegramMessageService {
                         question -> String.valueOf(question.getQuestionId()),
                         question -> question.getQuestionName()
                 ));
+        newMap.put("0", "Темы");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(3);
         telegramDTO.setMessage("Вопросы");
@@ -117,9 +138,9 @@ public class GetTelegramMessageService {
         log.info("Метод  forAnswer, telegramDTO {}", telegramDTO);
         Map<String, String> newMap = new HashMap<>();
         Answer answer = answerService.getAnswerByQuestionId(telegramDTO.getQuestion());
-        newMap.put("0", "Вернуться к вопросам категории");
+        newMap.put("0", "Вопросы");
         telegramDTO.setMap(newMap);
-        telegramDTO.setLevel(0);
+        telegramDTO.setLevel(4);
         telegramDTO.setMessage(answer.getAnswerName());
         return telegramDTO;
     }

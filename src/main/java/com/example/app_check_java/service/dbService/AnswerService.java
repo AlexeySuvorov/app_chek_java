@@ -23,7 +23,7 @@ public class AnswerService {
         log.info("Get answer by question id {}", questionId);
         Optional<Answer> answer = answerRepository.findById(questionId);
         if (answer.isPresent()) {
-            log.info("Ответ на вопрос - {}", answer.get());
+            log.info("Ответ на вопрос - {}", answer.toString());
             return answer.get();
         } else {
             log.info("Ответ на вопрос с ID {} не найден", questionId);
