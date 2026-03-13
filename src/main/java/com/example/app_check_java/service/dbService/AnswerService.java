@@ -21,7 +21,7 @@ public class AnswerService {
 
     public Answer getAnswerByQuestionId(long questionId) {
         log.info("Get answer by question id {}", questionId);
-        Optional<Answer> answer = answerRepository.findById(questionId);
+        Optional<Answer> answer = answerRepository.getAnswersByIdQuestion(questionId);
         if (answer.isPresent()) {
             log.info("Ответ на вопрос - {}", answer.toString());
             return answer.get();
