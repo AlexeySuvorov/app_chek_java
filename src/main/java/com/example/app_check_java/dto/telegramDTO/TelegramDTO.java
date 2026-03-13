@@ -19,8 +19,7 @@ public class TelegramDTO {
 
     private UserTelegramDTO user;
 
-    @NotBlank
-    private String message;
+    private String message; //сообщение для кнопок в телеграм
 
     private int level; //уровень таблицы 1-category, 2-topic, 3-question, 4-answer.
 

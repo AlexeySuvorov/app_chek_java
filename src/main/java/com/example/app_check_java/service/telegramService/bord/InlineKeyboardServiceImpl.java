@@ -42,6 +42,12 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
                     topic = telegramDTO.getTopic() + "";
                     question = elementKey;
                 }
+                case 4 -> {
+                    category = telegramDTO.getCategory() + "";
+                    topic = telegramDTO.getTopic() + "";
+                    question = elementKey;
+
+                }
             }
             InlineKeyboardButton button = InlineKeyboardButton.builder()
                     .text(map.get(elementKey))
@@ -56,10 +62,10 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
             currentRow.add(button);
 
             //Если операция относится к вопросу, начинаем каждую строку с новой строки
-//            if ("/Question/Answer".equals(rabbitMessageDTO.getPath())) {
-//                keyboardRows.add(currentRow);
-//                currentRow = new InlineKeyboardRow();
-//            }
+            if (telegramDTO.getLevel() == 3 || telegramDTO.getLevel() == 4) {
+                keyboardRows.add(currentRow);
+                currentRow = new InlineKeyboardRow();
+            }
 
             // Если в текущей строке 3 кнопки, начинаем новую строку
             if (currentRow.size() == 3) {

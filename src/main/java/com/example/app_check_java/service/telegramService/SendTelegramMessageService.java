@@ -47,7 +47,7 @@ public class SendTelegramMessageService {
                 telegramDTO.getMap().put("0", "Категории");
             }
             markup = keyBoardService.createStartKeyboard(telegramDTO);
-            methodSendMessage(chatId, "================================", markup);
+            methodSendMessage(chatId, telegramDTO.getMessage(), markup);
         }
     }
 

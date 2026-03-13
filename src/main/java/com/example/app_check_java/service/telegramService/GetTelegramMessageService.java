@@ -42,17 +42,10 @@ public class GetTelegramMessageService {
                     .lastName(update.getMessage().getFrom().getLastName())
                     .build();
 
-            Map<String, String> newMap = categoryService.getAllCategories().stream()
-                    .collect(Collectors.toMap(
-                            category -> String.valueOf(category.getCategoryId()),
-                            category -> category.getCategoryName()
-                    ));
-
             TelegramDTO telegramDTO = TelegramDTO.builder()
                     .user(userTelegramDTO)
-                    .map(newMap)
-                    .level(1)
                     .build();
+            forCategory(telegramDTO);
             sendTelegramMessageService.startKeybord(telegramDTO, 0);
 
         } else if ("callBackQuery".equals(type)) {
@@ -90,6 +83,7 @@ public class GetTelegramMessageService {
                 ));
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(1);
+        telegramDTO.setMessage("Категории");
         return telegramDTO;
     }
 
@@ -102,6 +96,7 @@ public class GetTelegramMessageService {
                 ));
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(2);
+        telegramDTO.setMessage("Темы");
         return telegramDTO;
     }
 
@@ -114,6 +109,7 @@ public class GetTelegramMessageService {
                 ));
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(3);
+        telegramDTO.setMessage("Вопросы");
         return telegramDTO;
     }
 
@@ -121,12 +117,10 @@ public class GetTelegramMessageService {
         log.info("Метод  forAnswer, telegramDTO {}", telegramDTO);
         Map<String, String> newMap = new HashMap<>();
         Answer answer = answerService.getAnswerByQuestionId(telegramDTO.getQuestion());
-        newMap.put(String.valueOf(answer.getAnswerId()), answer.getAnswerName());
-        newMap.put("0", "Категории");
-        newMap.put("1", "Темы");
-        newMap.put("2", "Вопросы");
+        newMap.put("0", "Вернуться к вопросам категории");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(0);
+        telegramDTO.setMessage(answer.getAnswerName());
         return telegramDTO;
     }
 }
