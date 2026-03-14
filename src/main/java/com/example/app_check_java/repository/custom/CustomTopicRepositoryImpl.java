@@ -62,6 +62,17 @@ public class CustomTopicRepositoryImpl implements CustomTopicRepository {
         log.debug("SQL запрос: {}", sql);
         return jdbcTemplate.query(sql, new TopicRowMapper(), categoryId);}
 
+    @Override
+    public Optional<Topic> getTopicById(Long topicId) {
+        log.info("Метод репозитория getTopicById, topicId: {}", topicId);
+        String sql = """
+                select * from topic t 
+                where t.topic_id = ?;
+                """;
+        log.debug("SQL: {}", sql);
+        return jdbcTemplate.query(sql, new TopicRowMapper(), topicId).stream().findFirst();
+    }
+
     private static class TopicRowMapper implements RowMapper<Topic> {
 
         @Override

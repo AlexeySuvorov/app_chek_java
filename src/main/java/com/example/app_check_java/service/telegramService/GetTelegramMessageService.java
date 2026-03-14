@@ -140,11 +140,11 @@ public class GetTelegramMessageService {
                         (existing, replacement) -> existing, // если ключи дублируются, оставляем первый
                         TreeMap::new // Используем TreeMap вместо HashMap
                 ));
-
+        String topicName = topicService.getTopicById(Long.valueOf(telegramDTO.getTopic())).getTopicName();
         newMap.put(0L, emojiTopic + " Темы");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(3);
-        telegramDTO.setMessage(emojiQuestion + " " + "Вопросы");
+        telegramDTO.setMessage("Вопросы для темы: " + topicName);
         return telegramDTO;
     }
 
@@ -153,11 +153,12 @@ public class GetTelegramMessageService {
         Map<Long, String> newMap = new HashMap<>();
         Answer answer = answerService.getAnswerByQuestionId(telegramDTO.getQuestion());
         Question question = answer.getQuestion();
+        String topicName = topicService.getTopicById(Long.valueOf(telegramDTO.getTopic())).getTopicName();
         //Создаем сообщение в котором для ответа будет сначала описан вопрос
         String text = emojiQuestion + question.getQuestionName() + "\n" +
                 "===================================" + "\n" +
                 emojiAnswer + answer.getAnswerName();
-        newMap.put(0L, emojiQuestion + " " + "Вопросы");
+        newMap.put(0L, emojiQuestion + " " + "Вопросы по " +  topicName);
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(4);
         telegramDTO.setMessage(text);

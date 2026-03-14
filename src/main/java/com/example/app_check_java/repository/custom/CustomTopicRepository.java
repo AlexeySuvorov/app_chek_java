@@ -9,5 +9,6 @@ public interface CustomTopicRepository {
     List<Topic> getAllTopicsByNameCategory(String categoryName);
     Optional<Topic> getTopicByNameAndByCategoryId(String topicName, Long categoryId);
     List<Topic> getAllTopicsByIdCategory(Integer categoryId);
+    Optional<Topic> getTopicById(Long topicId);
 
 }

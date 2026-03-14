@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -40,6 +41,10 @@ public class TopicService {
             log.info("Получены темы из БД");
             return topicList;
         }
+    }
 
+    public Topic getTopicById(Long topicId) {
+        log.info("Метод сервиса getTopicById {}", topicId);
+        return topicRepository.findById(topicId).orElseThrow(() -> new NotFoundTopicException("Topic not found"));
     }
 }

@@ -9,4 +9,5 @@ public interface CustomQuestionRepository {
     List<Question> getQuestions(String topicName);
     Optional<Question> getQuestionByNameAndTopicId(String questionName, Long topicId);
     List<Question> getQuestionsByTopicId(Integer topicId);
+    Optional<Question> getQuestionById(Long questionId);
 }

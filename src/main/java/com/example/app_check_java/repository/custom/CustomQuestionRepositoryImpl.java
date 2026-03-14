@@ -64,6 +64,15 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
         return questionList.stream().findFirst();
     }
 
+    @Override
+    public Optional<Question> getQuestionById(Long questionId) {
+        log.info("Метод репозитория getQuestionById {}", questionId);
+        String sql = """
+                select * from  question q
+                where q.question_id = ?;
+                """;
+        return jdbcTemplate.query(sql, new QestionRowMapper(), questionId).stream().findFirst();
+    }
 
     private static class QestionRowMapper implements RowMapper<Question> {
 
