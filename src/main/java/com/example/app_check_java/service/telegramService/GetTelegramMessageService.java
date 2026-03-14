@@ -3,6 +3,7 @@ package com.example.app_check_java.service.telegramService;
 import com.example.app_check_java.dto.telegramDTO.TelegramDTO;
 import com.example.app_check_java.dto.telegramDTO.UserTelegramDTO;
 import com.example.app_check_java.model.Answer;
+import com.example.app_check_java.model.Question;
 import com.example.app_check_java.model.Topic;
 import com.example.app_check_java.service.dbService.AnswerService;
 import com.example.app_check_java.service.dbService.CategoryService;
@@ -19,11 +20,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.TreeMap;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class GetTelegramMessageService {
+
+    private final String emojiCategory = "📁";  // Категория
+    private final String emojiTopic = "📚";      // Тема
+    private final String emojiQuestion = "❓";    // Вопрос
+    private final String emojiAnswer = "💡";      // Ответ
 
     private final CategoryService categoryService;
     private final TopicService topicService;
@@ -98,7 +105,9 @@ public class GetTelegramMessageService {
         Map<String, String> newMap = categoryService.getAllCategories().stream()
                 .collect(Collectors.toMap(
                         category -> String.valueOf(category.getCategoryId()),
-                        category -> category.getCategoryName()
+                        category -> emojiCategory + " " + category.getCategoryName(),
+                        (existing, replacement) -> existing,
+                        TreeMap::new
                 ));
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(1);
@@ -111,12 +120,14 @@ public class GetTelegramMessageService {
         Map<String, String> newMap = topicService.getAllTopicsByIdCategory(telegramDTO.getCategory()).stream()
                 .collect(Collectors.toMap(
                         topic -> String.valueOf(topic.getTopicId()),
-                        topic -> topic.getTopicName()
+                        topic -> emojiTopic + " " + topic.getTopicName(),
+                        (existing, replacement) -> existing,
+                        TreeMap::new
                 ));
-        newMap.put("0", "Категории");
+        newMap.put("0", emojiCategory + " Категории");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(2);
-        telegramDTO.setMessage("Темы");
+        telegramDTO.setMessage(emojiTopic + " Темы");
         return telegramDTO;
     }
 
@@ -125,12 +136,15 @@ public class GetTelegramMessageService {
         Map<String, String> newMap = questionService.findAllQuestionByTopicId(telegramDTO.getTopic()).stream()
                 .collect(Collectors.toMap(
                         question -> String.valueOf(question.getQuestionId()),
-                        question -> question.getQuestionName()
+                        question -> emojiQuestion + " " + question.getQuestionName(),
+                        (existing, replacement) -> existing, // если ключи дублируются, оставляем первый
+                        TreeMap::new // Используем TreeMap вместо HashMap
                 ));
-        newMap.put("0", "Темы");
+
+        newMap.put("0", emojiTopic + " Темы");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(3);
-        telegramDTO.setMessage("Вопросы");
+        telegramDTO.setMessage(emojiQuestion + " " + "Вопросы");
         return telegramDTO;
     }
 
@@ -138,10 +152,15 @@ public class GetTelegramMessageService {
         log.info("Метод  forAnswer, telegramDTO {}", telegramDTO);
         Map<String, String> newMap = new HashMap<>();
         Answer answer = answerService.getAnswerByQuestionId(telegramDTO.getQuestion());
-        newMap.put("0", "Вопросы");
+        Question question = answer.getQuestion();
+        //Создаем сообщение в котором для ответа будет сначала описан вопрос
+        String text = emojiQuestion + question.getQuestionName() + "\n" +
+                "===================================" + "\n" +
+                emojiAnswer + answer.getAnswerName();
+        newMap.put("0", emojiQuestion + " " + "Вопросы");
         telegramDTO.setMap(newMap);
         telegramDTO.setLevel(4);
-        telegramDTO.setMessage(answer.getAnswerName());
+        telegramDTO.setMessage(text);
         return telegramDTO;
     }
 }

@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +26,6 @@ public class TelegramDTO {
 
     private List<String> list = new ArrayList<>();
 
-    private Map<String, String> map = new HashMap<>();
+    private Map<String, String> map;
 
 }
