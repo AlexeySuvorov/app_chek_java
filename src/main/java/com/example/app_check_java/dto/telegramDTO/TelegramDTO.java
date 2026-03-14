@@ -26,6 +26,6 @@ public class TelegramDTO {
 
     private List<String> list = new ArrayList<>();
 
-    private Map<String, String> map;
+    private Map<Long, String> map;
 
 }

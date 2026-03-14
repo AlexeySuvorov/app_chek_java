@@ -23,8 +23,8 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
         List<InlineKeyboardRow> keyboardRows = new ArrayList<>();//Создается список строк клавиатуры (keyboardRows).
         InlineKeyboardRow currentRow = new InlineKeyboardRow();//Создается текущая строка (currentRow), в которую добавляются кнопки.
 
-        Map<String, String> map = telegramDTO.getMap();
-        for(String elementKey : map.keySet()) {
+        Map<Long, String> map = telegramDTO.getMap();
+        for(Long elementKey : map.keySet()) {
             log.info("callbackData {}", elementKey);
             log.info("level {}", telegramDTO.getLevel());
             String category = "0";
@@ -32,20 +32,20 @@ public class InlineKeyboardServiceImpl implements KeyBoardService {
             String question = "0";
 
             switch(telegramDTO.getLevel()) {
-                case 1 -> category = elementKey;
+                case 1 -> category = elementKey + "";
                 case 2 -> {
                     category = telegramDTO.getCategory() + "";
-                    topic = elementKey;
+                    topic = elementKey + "";
                 }
                 case 3 -> {
                     category = telegramDTO.getCategory() + "";
                     topic = telegramDTO.getTopic() + "";
-                    question = elementKey;
+                    question = elementKey + "";
                 }
                 case 4 -> {
                     category = telegramDTO.getCategory() + "";
                     topic = telegramDTO.getTopic() + "";
-                    question = elementKey;
+                    question = elementKey + "";
 
                 }
             }
